@@ -721,11 +721,27 @@ a.ref:hover { color: var(--text); border-color: var(--text); }
 <script>
 const toggle = document.getElementById('themeToggle');
 const html = document.documentElement;
+
+// Read theme from ?theme= param on load
+const params = new URLSearchParams(window.location.search);
+const paramTheme = params.get('theme');
+if (paramTheme === 'light' || paramTheme === 'dark') {
+  html.setAttribute('data-theme', paramTheme);
+  toggle.textContent = paramTheme;
+}
+
+function setTheme(theme) {
+  html.setAttribute('data-theme', theme);
+  toggle.textContent = theme;
+  const url = new URL(window.location);
+  url.searchParams.set('theme', theme);
+  window.history.replaceState({}, '', url);
+  initRadar();
+}
+
 toggle.addEventListener('click', () => {
   const dark = html.getAttribute('data-theme') === 'dark';
-  html.setAttribute('data-theme', dark ? 'light' : 'dark');
-  toggle.textContent = dark ? 'light' : 'dark';
-  initRadar();
+  setTheme(dark ? 'light' : 'dark');
 });
 
 const bar = document.getElementById('scrollProgress');
