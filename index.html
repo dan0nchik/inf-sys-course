@@ -8,418 +8,333 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
-/* ═══════════════════ CSS VARIABLES ═══════════════════ */
 :root {
   --font: 'Inter', -apple-system, sans-serif;
   --mono: 'JetBrains Mono', monospace;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
-  --dur: 0.6s;
+  --dur: 0.5s;
 }
 [data-theme="dark"] {
-  --bg: #0a0a1a;
-  --bg2: #12122a;
-  --bg3: #1a1a3e;
-  --surface: #1e1e42;
-  --surface2: #2a2a5a;
-  --text: #e8e8f0;
-  --text2: #a0a0c0;
-  --text3: #6a6a90;
-  --accent: #7c6cf0;
-  --accent2: #5ce1e6;
-  --accent3: #ff6b9d;
-  --accent4: #ffd93d;
-  --gradient1: linear-gradient(135deg, #7c6cf0, #5ce1e6);
-  --gradient2: linear-gradient(135deg, #ff6b9d, #ffd93d);
-  --gradient3: linear-gradient(135deg, #7c6cf0, #ff6b9d);
-  --glass: rgba(30, 30, 66, 0.7);
-  --glass-border: rgba(124, 108, 240, 0.15);
-  --shadow: 0 8px 32px rgba(0,0,0,0.3);
-  --glow: 0 0 40px rgba(124, 108, 240, 0.15);
+  --bg: #0c0c0c;
+  --surface: #161616;
+  --surface2: #1e1e1e;
+  --border: #2a2a2a;
+  --border2: #3a3a3a;
+  --text: #e5e5e5;
+  --text2: #999;
+  --text3: #555;
+  --accent: #fff;
+  --link: #bbb;
+  --shadow: 0 1px 3px rgba(0,0,0,0.4);
 }
 [data-theme="light"] {
-  --bg: #f5f5ff;
-  --bg2: #eeeef8;
-  --bg3: #e4e4f0;
-  --surface: #ffffff;
-  --surface2: #f0f0fa;
-  --text: #1a1a2e;
-  --text2: #555580;
-  --text3: #8888a8;
-  --accent: #6c5ce7;
-  --accent2: #00b4d8;
-  --accent3: #e84393;
-  --accent4: #f39c12;
-  --gradient1: linear-gradient(135deg, #6c5ce7, #00b4d8);
-  --gradient2: linear-gradient(135deg, #e84393, #f39c12);
-  --gradient3: linear-gradient(135deg, #6c5ce7, #e84393);
-  --glass: rgba(255, 255, 255, 0.85);
-  --glass-border: rgba(108, 92, 231, 0.1);
-  --shadow: 0 8px 32px rgba(0,0,0,0.08);
-  --glow: 0 0 40px rgba(108, 92, 231, 0.08);
+  --bg: #fafafa;
+  --surface: #fff;
+  --surface2: #f5f5f5;
+  --border: #e0e0e0;
+  --border2: #ccc;
+  --text: #111;
+  --text2: #555;
+  --text3: #999;
+  --accent: #000;
+  --link: #444;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06);
 }
 
-/* ═══════════════════ RESET & BASE ═══════════════════ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 body {
   font-family: var(--font);
   background: var(--bg);
   color: var(--text);
   line-height: 1.7;
-  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+  transition: background var(--dur), color var(--dur);
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ═══════════════════ SCROLLBAR ═══════════════════ */
-::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
 
-/* ═══════════════════ ANIMATED BACKGROUND ═══════════════════ */
-.bg-orbs {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  pointer-events: none; z-index: 0; overflow: hidden;
-}
-.bg-orbs .orb {
-  position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.12;
-  animation: orbFloat 20s ease-in-out infinite alternate;
-}
-.bg-orbs .orb:nth-child(1) { width: 600px; height: 600px; background: var(--accent); top: -10%; left: -10%; }
-.bg-orbs .orb:nth-child(2) { width: 500px; height: 500px; background: var(--accent2); top: 40%; right: -10%; animation-delay: -7s; }
-.bg-orbs .orb:nth-child(3) { width: 400px; height: 400px; background: var(--accent3); bottom: -5%; left: 30%; animation-delay: -14s; }
-@keyframes orbFloat {
-  0% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(30px, -50px) scale(1.1); }
-  66% { transform: translate(-20px, 30px) scale(0.95); }
-  100% { transform: translate(10px, -20px) scale(1.05); }
+/* ── Progress bar ── */
+.scroll-progress {
+  position: fixed; top: 0; left: 0; height: 2px; z-index: 101;
+  background: var(--accent); width: 0%; transition: width 0.1s;
 }
 
-/* ═══════════════════ TOP NAV ═══════════════════ */
+/* ── Nav ── */
 .topnav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  background: var(--glass);
-  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--glass-border);
-  transition: all var(--dur) var(--ease);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  transition: background var(--dur);
 }
 .topnav-inner {
-  max-width: 1100px; margin: 0 auto;
+  max-width: 960px; margin: 0 auto;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 24px;
+  padding: 14px 24px;
 }
-.topnav-title {
-  font-size: 14px; font-weight: 700;
-  background: var(--gradient1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.topnav-links { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.topnav-title { font-size: 13px; font-weight: 700; letter-spacing: -0.3px; color: var(--text); }
+.topnav-links { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
 .topnav-links a {
-  color: var(--text2); text-decoration: none; font-size: 12px; font-weight: 500;
-  padding: 4px 10px; border-radius: 6px; transition: all 0.3s;
+  color: var(--text3); text-decoration: none; font-size: 12px; font-weight: 500;
+  padding: 4px 8px; border-radius: 4px; transition: color 0.2s;
 }
-.topnav-links a:hover { color: var(--accent); background: var(--surface); }
+.topnav-links a:hover, .topnav-links a.active { color: var(--text); }
 .theme-toggle {
-  background: var(--surface); border: 1px solid var(--glass-border);
-  color: var(--text); cursor: pointer; padding: 6px 10px; border-radius: 8px;
-  font-size: 16px; transition: all 0.3s; margin-left: 8px;
+  background: none; border: 1px solid var(--border);
+  color: var(--text2); cursor: pointer; padding: 4px 8px; border-radius: 4px;
+  font-size: 11px; font-family: var(--mono); transition: all 0.2s; margin-left: 6px;
 }
-.theme-toggle:hover { border-color: var(--accent); transform: scale(1.1); }
+.theme-toggle:hover { border-color: var(--text2); color: var(--text); }
 
-/* ═══════════════════ SCROLL PROGRESS ═══════════════════ */
-.scroll-progress {
-  position: fixed; top: 0; left: 0; height: 3px; z-index: 101;
-  background: var(--gradient1); width: 0%; transition: width 0.1s;
-}
-
-/* ═══════════════════ HERO ═══════════════════ */
+/* ── Hero ── */
 .hero {
-  position: relative; z-index: 1;
   min-height: 100vh; display: flex; flex-direction: column;
   align-items: center; justify-content: center; text-align: center;
   padding: 120px 24px 80px;
+  border-bottom: 1px solid var(--border);
 }
 .hero-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: var(--surface); border: 1px solid var(--glass-border);
-  padding: 6px 16px; border-radius: 99px; font-size: 13px; color: var(--text2);
-  margin-bottom: 24px;
+  font-size: 11px; text-transform: uppercase; letter-spacing: 3px;
+  color: var(--text3); margin-bottom: 32px; font-weight: 500;
   animation: fadeUp 0.8s var(--ease) both;
 }
-.hero-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; animation: pulse 2s infinite; }
-@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 .hero h1 {
-  font-size: clamp(32px, 5vw, 56px); font-weight: 900; line-height: 1.15;
-  max-width: 800px; margin-bottom: 20px;
-  background: var(--gradient1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-size: clamp(28px, 4.5vw, 48px); font-weight: 800; line-height: 1.15;
+  max-width: 720px; margin-bottom: 24px; letter-spacing: -1px;
+  color: var(--text);
   animation: fadeUp 0.8s var(--ease) 0.1s both;
 }
 .hero-sub {
-  font-size: clamp(16px, 2vw, 20px); color: var(--text2);
-  max-width: 650px; line-height: 1.6; margin-bottom: 36px;
+  font-size: clamp(15px, 1.8vw, 18px); color: var(--text2);
+  max-width: 560px; line-height: 1.7; margin-bottom: 48px;
   animation: fadeUp 0.8s var(--ease) 0.2s both;
 }
 .hero-stats {
-  display: flex; gap: 32px; flex-wrap: wrap; justify-content: center;
+  display: flex; gap: 48px; flex-wrap: wrap; justify-content: center;
   animation: fadeUp 0.8s var(--ease) 0.3s both;
 }
-.hero-stat {
-  text-align: center;
-}
+.hero-stat { text-align: center; }
 .hero-stat .num {
-  font-size: 40px; font-weight: 900;
-  background: var(--gradient2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-size: 36px; font-weight: 900; color: var(--text);
+  font-family: var(--mono); letter-spacing: -2px;
 }
-.hero-stat .label { font-size: 12px; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; }
+.hero-stat .label {
+  font-size: 10px; color: var(--text3); text-transform: uppercase;
+  letter-spacing: 2px; margin-top: 4px;
+}
 .scroll-hint {
-  position: absolute; bottom: 40px;
-  animation: bounce 2s infinite;
-  color: var(--text3); font-size: 24px;
+  position: absolute; bottom: 32px;
+  animation: bounce 2.5s infinite;
+  color: var(--text3); font-size: 18px;
 }
-@keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(10px); } }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-/* ═══════════════════ SECTIONS ═══════════════════ */
-.content { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 24px 80px; }
-
+/* ── Sections ── */
+.content { max-width: 960px; margin: 0 auto; padding: 0 24px 80px; }
 section {
-  margin-bottom: 80px;
-  opacity: 0; transform: translateY(40px);
-  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+  margin-bottom: 80px; padding-top: 40px;
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
 }
 section.visible { opacity: 1; transform: translateY(0); }
 
 .section-label {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: 12px; text-transform: uppercase; letter-spacing: 2px;
-  color: var(--accent); font-weight: 600; margin-bottom: 12px;
+  font-size: 11px; text-transform: uppercase; letter-spacing: 3px;
+  color: var(--text3); font-weight: 500; margin-bottom: 12px;
+  font-family: var(--mono);
 }
-.section-label::before {
-  content: ''; width: 24px; height: 2px; background: var(--accent); border-radius: 1px;
-}
-
 section h2 {
-  font-size: clamp(24px, 3.5vw, 36px); font-weight: 800; margin-bottom: 20px;
-  line-height: 1.2;
+  font-size: clamp(22px, 3vw, 32px); font-weight: 800; margin-bottom: 20px;
+  line-height: 1.2; letter-spacing: -0.5px;
 }
-section p, section li {
-  color: var(--text2); font-size: 16px;
-}
-section p { margin-bottom: 16px; }
+section p, section li { color: var(--text2); font-size: 15px; }
+section p { margin-bottom: 14px; }
 
-/* ═══════════════════ GLASS CARD ═══════════════════ */
+/* ── Card ── */
 .card {
-  background: var(--glass);
-  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--glass-border);
-  border-radius: 16px; padding: 28px;
-  box-shadow: var(--shadow);
-  transition: all 0.4s var(--ease);
-  margin-bottom: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px; padding: 24px;
+  transition: border-color 0.3s;
+  margin-bottom: 16px;
 }
-.card:hover { border-color: var(--accent); box-shadow: var(--glow); transform: translateY(-2px); }
+.card:hover { border-color: var(--border2); }
 
-.card-header {
-  display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
-}
+.card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
 .card-icon {
-  width: 44px; height: 44px; border-radius: 12px;
+  width: 36px; height: 36px; border-radius: 6px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 20px; flex-shrink: 0;
+  font-size: 14px; font-weight: 800; flex-shrink: 0;
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--text); font-family: var(--mono);
 }
-.card-title { font-size: 18px; font-weight: 700; color: var(--text); }
+.card-title { font-size: 16px; font-weight: 700; color: var(--text); }
 
-/* ═══════════════════ TIER CARDS ═══════════════════ */
-.tier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+/* ── Tier cards ── */
+.tier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
 .tier-num {
-  font-size: 48px; font-weight: 900; opacity: 0.1; position: absolute; top: -10px; right: 16px;
+  font-size: 64px; font-weight: 900; opacity: 0.04; position: absolute; top: -16px; right: 12px;
   font-family: var(--mono);
 }
 .tier-card { position: relative; overflow: hidden; }
 
-/* ═══════════════════ MISSING FIVE ═══════════════════ */
-.missing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
-.missing-card { position: relative; padding-left: 20px; }
+/* ── Missing Five ── */
+.missing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.missing-card { padding-left: 16px; position: relative; }
 .missing-card::before {
-  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
-  border-radius: 2px;
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px;
+  background: var(--border2); border-radius: 1px;
 }
-.missing-card:nth-child(1)::before { background: var(--accent); }
-.missing-card:nth-child(2)::before { background: var(--accent2); }
-.missing-card:nth-child(3)::before { background: var(--accent4); }
-.missing-card:nth-child(4)::before { background: var(--accent3); }
-.missing-card:nth-child(5)::before { background: #22c55e; }
-.missing-num { font-family: var(--mono); font-size: 11px; color: var(--accent); margin-bottom: 4px; }
-.missing-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; color: var(--text); }
-.missing-desc { font-size: 14px; color: var(--text2); line-height: 1.5; }
+.missing-num { font-family: var(--mono); font-size: 10px; color: var(--text3); margin-bottom: 4px; letter-spacing: 1px; }
+.missing-title { font-weight: 700; font-size: 14px; margin-bottom: 6px; color: var(--text); }
+.missing-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
 
-/* ═══════════════════ CLUSTER ACCORDION ═══════════════════ */
-.cluster { margin-bottom: 12px; }
+/* ── Clusters ── */
+.cluster { margin-bottom: 8px; }
 .cluster-header {
-  display: flex; align-items: center; gap: 14px;
-  background: var(--glass); border: 1px solid var(--glass-border);
-  border-radius: 14px; padding: 18px 24px; cursor: pointer;
-  transition: all 0.3s var(--ease); user-select: none;
+  display: flex; align-items: center; gap: 12px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 6px; padding: 14px 20px; cursor: pointer;
+  transition: all 0.2s; user-select: none;
 }
-.cluster-header:hover { border-color: var(--accent); }
-.cluster-header.open { border-radius: 14px 14px 0 0; border-color: var(--accent); }
+.cluster-header:hover { border-color: var(--border2); }
+.cluster-header.open { border-radius: 6px 6px 0 0; border-color: var(--border2); }
 .cluster-num {
-  width: 36px; height: 36px; border-radius: 10px;
+  width: 28px; height: 28px; border-radius: 4px;
   display: flex; align-items: center; justify-content: center;
-  font-weight: 800; font-size: 14px; color: #fff; flex-shrink: 0;
+  font-weight: 800; font-size: 12px; flex-shrink: 0;
+  background: var(--accent); color: var(--bg);
+  font-family: var(--mono);
 }
-.cluster-name { font-weight: 700; font-size: 16px; flex: 1; }
-.cluster-chevron {
-  font-size: 18px; color: var(--text3); transition: transform 0.3s var(--ease);
-}
+.cluster-name { font-weight: 600; font-size: 14px; flex: 1; }
+.cluster-chevron { font-size: 12px; color: var(--text3); transition: transform 0.3s var(--ease); }
 .cluster-header.open .cluster-chevron { transform: rotate(180deg); }
 .cluster-body {
-  background: var(--glass);
-  border: 1px solid var(--accent);
-  border-top: none;
-  border-radius: 0 0 14px 14px;
-  padding: 0 24px;
+  background: var(--surface);
+  border: 1px solid var(--border2); border-top: none;
+  border-radius: 0 0 6px 6px;
+  padding: 0 20px;
   max-height: 0; overflow: hidden;
   transition: max-height 0.5s var(--ease), padding 0.5s var(--ease);
 }
-.cluster-body.open { max-height: 600px; padding: 20px 24px; }
-.cluster-body h4 { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin: 12px 0 6px; }
-.cluster-body h4:first-child { margin-top: 0; }
-.cluster-body p, .cluster-body li { font-size: 14px; color: var(--text2); }
-.cluster-body ul { padding-left: 18px; }
-.cluster-body li { margin-bottom: 4px; }
-.artifact-tag {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: var(--surface2); border-radius: 8px; padding: 6px 14px;
-  font-size: 13px; font-weight: 600; color: var(--accent2); margin-top: 8px;
+.cluster-body.open { max-height: 600px; padding: 16px 20px; }
+.cluster-body h4 {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 2px;
+  color: var(--text3); margin: 10px 0 4px; font-family: var(--mono);
 }
+.cluster-body h4:first-child { margin-top: 0; }
+.cluster-body p, .cluster-body li { font-size: 13px; color: var(--text2); }
+.cluster-body ul { padding-left: 16px; }
+.cluster-body li { margin-bottom: 3px; }
 
-/* ═══════════════════ TIMELINE / ROADMAP ═══════════════════ */
+/* ── Timeline ── */
 .roadmap-container { position: relative; padding: 20px 0; }
 .roadmap-line {
-  position: absolute; left: 50%; top: 0; bottom: 0; width: 3px;
-  background: var(--gradient1); transform: translateX(-50%);
-  border-radius: 2px;
+  position: absolute; left: 50%; top: 0; bottom: 0; width: 1px;
+  background: var(--border); transform: translateX(-50%);
 }
-@media (max-width: 768px) { .roadmap-line { left: 20px; } }
+@media (max-width: 768px) { .roadmap-line { left: 16px; } }
 .rm-item {
-  display: flex; align-items: flex-start; margin-bottom: 32px;
+  display: flex; align-items: flex-start; margin-bottom: 24px;
   position: relative;
-  opacity: 0; transform: translateX(-30px);
+  opacity: 0; transform: translateX(-20px);
   transition: all 0.6s var(--ease);
 }
 .rm-item.visible { opacity: 1; transform: translateX(0); }
-.rm-item:nth-child(even) { flex-direction: row-reverse; transform: translateX(30px); }
+.rm-item:nth-child(even) { flex-direction: row-reverse; transform: translateX(20px); }
 .rm-item:nth-child(even).visible { transform: translateX(0); }
 @media (max-width: 768px) {
-  .rm-item, .rm-item:nth-child(even) { flex-direction: row; transform: translateX(-30px); }
+  .rm-item, .rm-item:nth-child(even) { flex-direction: row; transform: translateX(-20px); }
   .rm-item.visible, .rm-item:nth-child(even).visible { transform: translateX(0); }
 }
 .rm-content {
-  width: 44%; padding: 20px;
-  background: var(--glass); border: 1px solid var(--glass-border);
-  border-radius: 14px; transition: all 0.3s;
+  width: 44%; padding: 16px 20px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 6px; transition: border-color 0.2s;
 }
-@media (max-width: 768px) { .rm-content { width: calc(100% - 56px); margin-left: 16px; } }
-.rm-content:hover { border-color: var(--accent); box-shadow: var(--glow); }
+@media (max-width: 768px) { .rm-content { width: calc(100% - 48px); margin-left: 12px; } }
+.rm-content:hover { border-color: var(--border2); }
 .rm-dot {
-  position: absolute; left: 50%; top: 24px;
-  width: 18px; height: 18px; border-radius: 50%;
-  border: 3px solid var(--bg); transform: translateX(-50%);
-  z-index: 2; transition: all 0.3s;
+  position: absolute; left: 50%; top: 20px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--accent); border: 2px solid var(--bg);
+  transform: translateX(-50%); z-index: 2;
+  transition: transform 0.2s;
 }
-@media (max-width: 768px) { .rm-dot { left: 20px; } }
-.rm-item:hover .rm-dot { transform: translateX(-50%) scale(1.3); box-shadow: 0 0 20px currentColor; }
-@media (max-width: 768px) { .rm-item:hover .rm-dot { transform: translateX(0) scale(1.3); } }
-.rm-week { font-weight: 800; font-size: 14px; margin-bottom: 6px; }
-.rm-desc { font-size: 14px; color: var(--text2); line-height: 1.5; }
+@media (max-width: 768px) { .rm-dot { left: 16px; } }
+.rm-item:hover .rm-dot { transform: translateX(-50%) scale(1.4); }
+@media (max-width: 768px) { .rm-item:hover .rm-dot { transform: translateX(0) scale(1.4); } }
+.rm-week {
+  font-weight: 800; font-size: 13px; margin-bottom: 4px;
+  color: var(--text); font-family: var(--mono);
+}
+.rm-desc { font-size: 13px; color: var(--text2); line-height: 1.5; }
 .rm-spacer { width: 12%; }
 @media (max-width: 768px) { .rm-spacer { display: none; } }
 
-/* ═══════════════════ CHART SECTION ═══════════════════ */
+/* ── Chart ── */
 .chart-wrapper {
-  max-width: 500px; margin: 0 auto;
-  background: var(--glass); border: 1px solid var(--glass-border);
-  border-radius: 16px; padding: 24px;
+  max-width: 480px; margin: 0 auto;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 24px;
 }
 
-/* ═══════════════════ STRATEGY SECTION ═══════════════════ */
-.strategy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
-.strategy-card .emoji { font-size: 28px; margin-bottom: 12px; }
-.strategy-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
-.strategy-card p { font-size: 14px; }
+/* ── Strategy ── */
+.strategy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.strategy-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+.strategy-card p { font-size: 13px; }
 
-/* ═══════════════════ METRICS ═══════════════════ */
-.metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
-.metric-card { display: flex; gap: 14px; align-items: flex-start; }
-.metric-icon {
-  width: 40px; height: 40px; border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; flex-shrink: 0;
+/* ── Metrics ── */
+.metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.metric-card { display: flex; gap: 12px; align-items: flex-start; }
+.metric-num {
+  font-family: var(--mono); font-size: 20px; font-weight: 900;
+  color: var(--text); flex-shrink: 0; width: 28px; text-align: right;
 }
-.metric-title { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
-.metric-desc { font-size: 14px; color: var(--text2); }
+.metric-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+.metric-desc { font-size: 13px; color: var(--text2); }
 
-/* ═══════════════════ LINKS / TAGS ═══════════════════ */
+/* ── Links ── */
 a.ref {
-  color: var(--accent2); text-decoration: none;
-  border-bottom: 1px dashed var(--accent2);
+  color: var(--link); text-decoration: none;
+  border-bottom: 1px solid var(--border2);
   transition: all 0.2s;
 }
-a.ref:hover { color: var(--accent); border-color: var(--accent); }
-.tag {
-  display: inline-block; font-size: 12px; font-weight: 600;
-  padding: 2px 10px; border-radius: 6px;
-  background: var(--surface2); color: var(--accent); margin: 2px;
-}
+a.ref:hover { color: var(--text); border-color: var(--text); }
 
-/* ═══════════════════ FOOTER ═══════════════════ */
-.footer {
-  text-align: center; padding: 40px 24px; color: var(--text3); font-size: 13px;
-  border-top: 1px solid var(--glass-border);
-}
-
-/* ═══════════════════ KEY INSIGHT CALLOUT ═══════════════════ */
+/* ── Callout ── */
 .callout {
-  background: var(--glass);
-  border: 1px solid var(--accent);
-  border-radius: 14px; padding: 24px;
-  position: relative; overflow: hidden;
-  margin: 24px 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 6px 6px 0;
+  padding: 20px 24px;
+  margin: 20px 0;
 }
-.callout::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  background: var(--gradient1);
+.callout-title {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 2px;
+  color: var(--text3); margin-bottom: 8px; font-weight: 600;
+  font-family: var(--mono);
 }
-.callout-title { font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); margin-bottom: 10px; font-weight: 700; }
 
-/* ═══════════════════ TOOLTIP ═══════════════════ */
-[data-tooltip] { position: relative; cursor: help; }
-[data-tooltip]:hover::after {
-  content: attr(data-tooltip);
-  position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
-  background: var(--surface); color: var(--text); font-size: 12px;
-  padding: 6px 12px; border-radius: 8px; white-space: nowrap;
-  box-shadow: var(--shadow); z-index: 10;
-  animation: fadeUp 0.2s var(--ease);
+/* ── Footer ── */
+.footer {
+  text-align: center; padding: 40px 24px; color: var(--text3); font-size: 12px;
+  border-top: 1px solid var(--border); font-family: var(--mono);
 }
 </style>
 </head>
 <body>
 
-<!-- Background orbs -->
-<div class="bg-orbs">
-  <div class="orb"></div><div class="orb"></div><div class="orb"></div>
-</div>
-
-<!-- Scroll progress -->
 <div class="scroll-progress" id="scrollProgress"></div>
 
-<!-- Top nav -->
 <nav class="topnav">
   <div class="topnav-inner">
-    <div class="topnav-title">ИС &amp; Цифровая трансформация</div>
+    <div class="topnav-title">ИС & Цифровая трансформация</div>
     <div class="topnav-links">
       <a href="#summary">Резюме</a>
       <a href="#competition">Конкуренты</a>
@@ -428,31 +343,28 @@ a.ref:hover { color: var(--accent); border-color: var(--accent); }
       <a href="#strategy">Стратегия</a>
       <a href="#roadmap">Дорожная карта</a>
       <a href="#metrics">Метрики</a>
-      <button class="theme-toggle" id="themeToggle" title="Переключить тему">🌙</button>
+      <button class="theme-toggle" id="themeToggle">dark</button>
     </div>
   </div>
 </nav>
 
-<!-- ═══════════════════ HERO ═══════════════════ -->
 <header class="hero">
-  <div class="hero-badge"><span class="dot"></span> Комплексное исследование 2026</div>
+  <div class="hero-badge">Комплексное исследование &middot; 2026</div>
   <h1>YouTube-ландшафт курсов по Информационным системам и Цифровой трансформации</h1>
   <p class="hero-sub">Ни один YouTube-канал не предлагает полноценного, интегрированного курса на стыке <a class="ref" href="https://en.wikipedia.org/wiki/Master_of_Business_Administration">MBA</a> и IT. Это ваш шанс занять пустующую нишу.</p>
   <div class="hero-stats">
-    <div class="hero-stat"><div class="num" data-count="5">0</div><div class="label">Критических пробелов</div></div>
-    <div class="hero-stat"><div class="num" data-count="6">0</div><div class="label">Кластеров контента</div></div>
-    <div class="hero-stat"><div class="num" data-count="12">0</div><div class="label">Недель до запуска</div></div>
-    <div class="hero-stat"><div class="num" data-count="0" data-suffix="%" data-real="0">0</div><div class="label">Конкуренция (RU)</div></div>
+    <div class="hero-stat"><div class="num" data-count="5">0</div><div class="label">Пробелов</div></div>
+    <div class="hero-stat"><div class="num" data-count="6">0</div><div class="label">Кластеров</div></div>
+    <div class="hero-stat"><div class="num" data-count="12">0</div><div class="label">Недель</div></div>
+    <div class="hero-stat"><div class="num" data-count="0" data-suffix="%">0</div><div class="label">Конкуренция RU</div></div>
   </div>
-  <div class="scroll-hint">↓</div>
+  <div class="scroll-hint">&#8595;</div>
 </header>
 
-<!-- ═══════════════════ CONTENT ═══════════════════ -->
 <main class="content">
 
-<!-- ──── SECTION 1: EXECUTIVE SUMMARY ──── -->
 <section id="summary">
-  <div class="section-label">Раздел 1</div>
+  <div class="section-label">01</div>
   <h2>Исполнительное резюме и главный вывод</h2>
   <p>На сегодняшний день <strong>ни один YouTube-канал (ни в англоязычном, ни в русскоязычном сегменте) не предлагает полноценного, интегрированного курса на стыке MBA и IT</strong>, посвященного информационным системам и цифровой трансформации бизнеса.</p>
   <p>Контентный ландшафт строго фрагментирован. Существующие видео либо слишком технические (как настроить <a class="ref" href="https://www.sap.com/">SAP</a>, написать код, собрать дашборд), либо слишком общие (базовый <a class="ref" href="https://en.wikipedia.org/wiki/SWOT_analysis">SWOT</a>-анализ, оторванный от технологий). Отсутствует <strong>«управленческий мост» (managerial perspective)</strong>, который учит бизнес-лидеров оценивать, выбирать и внедрять ИТ-решения с точки зрения экономики, рисков и управления изменениями.</p>
@@ -462,33 +374,32 @@ a.ref:hover { color: var(--accent); border-color: var(--accent); }
   </div>
 </section>
 
-<!-- ──── SECTION 2: COMPETITION ──── -->
 <section id="competition">
-  <div class="section-label">Раздел 2</div>
+  <div class="section-label">02</div>
   <h2>Анализ конкурентной среды: кто и что покрывает</h2>
   <p>YouTube-рынок по запрошенным темам делится на три эшелона:</p>
   <div class="tier-grid">
     <div class="card tier-card">
       <span class="tier-num">01</span>
       <div class="card-header">
-        <div class="card-icon" style="background:var(--gradient1);">🌐</div>
-        <div class="card-title">Глобальные EdTech-гиганты (Tier 1)</div>
+        <div class="card-icon">T1</div>
+        <div class="card-title">Глобальные EdTech-гиганты</div>
       </div>
       <p>Каналы вроде <a class="ref" href="https://www.youtube.com/@SimplilearnOfficial"><em>Simplilearn (~9M)</em></a>, <a class="ref" href="https://www.youtube.com/@edaborea"><em>Edureka (~3.5M)</em></a>. У них отличный продакшн, но контент разрознен и служит воронкой продаж. Они покрывают управление проектами (<a class="ref" href="https://www.pmi.org/certifications/project-management-pmp">PMP</a>) и BI, но почти не касаются бизнес-стратегии внедрения.</p>
     </div>
     <div class="card tier-card">
       <span class="tier-num">02</span>
       <div class="card-header">
-        <div class="card-icon" style="background:var(--gradient2);">🎓</div>
-        <div class="card-title">Университетские лекции (Tier 2)</div>
+        <div class="card-icon">T2</div>
+        <div class="card-title">Университетские лекции</div>
       </div>
       <p>Самый полный на сегодня курс — это <a class="ref" href="https://www.youtube.com/@iaboraoficialtpr"><em>NPTEL</em></a> (<a class="ref" href="https://www.youtube.com/playlist?list=PLbRMhDVUMngekIHyLt8b_3jQR7C0KUCul"><em>IIT Kharagpur, Индия</em></a>). 60 видео покрывают около 60% нужных тем, но страдают от низкого качества продакшена (запись лекций с проектора). В РФ похожую нишу занимают выгрузки лекций ВШЭ или МФТИ, но они часто носят теоретический характер.</p>
     </div>
     <div class="card tier-card">
       <span class="tier-num">03</span>
       <div class="card-header">
-        <div class="card-icon" style="background:linear-gradient(135deg, #22c55e, #0ea5e9);">🔧</div>
-        <div class="card-title">Практики и вендоры (Tier 3)</div>
+        <div class="card-icon">T3</div>
+        <div class="card-title">Практики и вендоры</div>
       </div>
       <p>На глобальном рынке выделяется <a class="ref" href="https://www.youtube.com/@EricKimberling"><em>Eric Kimberling</em></a> (<a class="ref" href="https://www.thirdstage-consulting.com/"><em>Third Stage Consulting</em></a>) — единственный канал, успешно объединяющий ИТ и бизнес (фокус на <a class="ref" href="https://en.wikipedia.org/wiki/Enterprise_resource_planning">ERP</a>). В России доминирует вендорское обучение (например, <a class="ref" href="https://www.youtube.com/@1aboraC">каналы 1С</a>), которое учит нажимать кнопки в конкретной системе, а не принимать стратегические решения.</p>
     </div>
@@ -499,9 +410,8 @@ a.ref:hover { color: var(--accent); border-color: var(--accent); }
   </div>
 </section>
 
-<!-- ──── SECTION 3: GAPS ──── -->
 <section id="gaps">
-  <div class="section-label">Раздел 3</div>
+  <div class="section-label">03</div>
   <h2>Критические контентные пробелы рынка</h2>
   <p>Анализ выявил не просто слабую подачу, а полное отсутствие материалов управленческого уровня по пяти критическим темам («The Missing Five»):</p>
   <div class="missing-grid">
@@ -532,27 +442,24 @@ a.ref:hover { color: var(--accent); border-color: var(--accent); }
     </div>
   </div>
 
-  <!-- Radar chart -->
   <div style="margin-top:40px;">
-    <h3 style="text-align:center; margin-bottom:16px; font-size:18px;">Покрытие тем на YouTube vs Идеальный курс</h3>
+    <h3 style="text-align:center; margin-bottom:16px; font-size:16px; font-weight:600;">Покрытие тем на YouTube vs Идеальный курс</h3>
     <div class="chart-wrapper">
       <canvas id="radarChart"></canvas>
     </div>
   </div>
 </section>
 
-<!-- ──── SECTION 4: CLUSTERS ──── -->
 <section id="clusters">
-  <div class="section-label">Раздел 4</div>
+  <div class="section-label">04</div>
   <h2>Срез рынка по кластерам и план идеальной серии</h2>
   <p>Чтобы обойти конкурентов, новая серия должна строиться как <strong>практикум</strong>, где каждый эпизод дает зрителю конкретный управленческий артефакт (таблицу, шаблон, матрицу).</p>
 
-  <!-- Cluster 1 -->
   <div class="cluster">
     <div class="cluster-header" onclick="toggleCluster(this)">
-      <div class="cluster-num" style="background:var(--gradient1);">1</div>
+      <div class="cluster-num">1</div>
       <div class="cluster-name">ИС и ИКТ в организации</div>
-      <span class="cluster-chevron">▼</span>
+      <span class="cluster-chevron">&#9660;</span>
     </div>
     <div class="cluster-body">
       <h4>Текущая ситуация</h4>
@@ -569,12 +476,11 @@ a.ref:hover { color: var(--accent); border-color: var(--accent); }
     </div>
   </div>
 
-  <!-- Cluster 2 -->
   <div class="cluster">
     <div class="cluster-header" onclick="toggleCluster(this)">
-      <div class="cluster-num" style="background:linear-gradient(135deg,#0984e3,#00b894);">2</div>
+      <div class="cluster-num">2</div>
       <div class="cluster-name">Стратегия цифровой трансформации</div>
-      <span class="cluster-chevron">▼</span>
+      <span class="cluster-chevron">&#9660;</span>
     </div>
     <div class="cluster-body">
       <h4>Текущая ситуация</h4>
@@ -591,12 +497,11 @@ a.ref:hover { color: var(--accent); border-color: var(--accent); }
     </div>
   </div>
 
-  <!-- Cluster 3 -->
   <div class="cluster">
     <div class="cluster-header" onclick="toggleCluster(this)">
-      <div class="cluster-num" style="background:linear-gradient(135deg,#e17055,#fdcb6e);">3</div>
+      <div class="cluster-num">3</div>
       <div class="cluster-name">Управление проектами и изменениями</div>
-      <span class="cluster-chevron">▼</span>
+      <span class="cluster-chevron">&#9660;</span>
     </div>
     <div class="cluster-body">
       <h4>Текущая ситуация</h4>
@@ -613,12 +518,11 @@ a.ref:hover { color: var(--accent); border-color: var(--accent); }
     </div>
   </div>
 
-  <!-- Cluster 4 -->
   <div class="cluster">
     <div class="cluster-header" onclick="toggleCluster(this)">
-      <div class="cluster-num" style="background:linear-gradient(135deg,#e84393,#fd79a8);">4</div>
+      <div class="cluster-num">4</div>
       <div class="cluster-name">Портфель и выбор цифровых инициатив</div>
-      <span class="cluster-chevron">▼</span>
+      <span class="cluster-chevron">&#9660;</span>
     </div>
     <div class="cluster-body">
       <h4>Текущая ситуация</h4>
@@ -635,12 +539,11 @@ a.ref:hover { color: var(--accent); border-color: var(--accent); }
     </div>
   </div>
 
-  <!-- Cluster 5 -->
   <div class="cluster">
     <div class="cluster-header" onclick="toggleCluster(this)">
-      <div class="cluster-num" style="background:linear-gradient(135deg,#00b894,#55efc4);">5</div>
+      <div class="cluster-num">5</div>
       <div class="cluster-name">Процессы и корпоративные системы (<a class="ref" href="https://en.wikipedia.org/wiki/Enterprise_resource_planning">ERP</a>/<a class="ref" href="https://en.wikipedia.org/wiki/Business_process_management">BPM</a>)</div>
-      <span class="cluster-chevron">▼</span>
+      <span class="cluster-chevron">&#9660;</span>
     </div>
     <div class="cluster-body">
       <h4>Текущая ситуация</h4>
@@ -657,12 +560,11 @@ a.ref:hover { color: var(--accent); border-color: var(--accent); }
     </div>
   </div>
 
-  <!-- Cluster 6 -->
   <div class="cluster">
     <div class="cluster-header" onclick="toggleCluster(this)">
-      <div class="cluster-num" style="background:linear-gradient(135deg,#6c5ce7,#a29bfe);">6</div>
+      <div class="cluster-num">6</div>
       <div class="cluster-name">Данные, AI и Киберриски (управленческий взгляд)</div>
-      <span class="cluster-chevron">▼</span>
+      <span class="cluster-chevron">&#9660;</span>
     </div>
     <div class="cluster-body">
       <h4>Текущая ситуация</h4>
@@ -681,135 +583,127 @@ a.ref:hover { color: var(--accent); border-color: var(--accent); }
   </div>
 </section>
 
-<!-- ──── SECTION 5: STRATEGY ──── -->
 <section id="strategy">
-  <div class="section-label">Раздел 5</div>
+  <div class="section-label">05</div>
   <h2>Стратегия позиционирования</h2>
   <div class="strategy-grid">
     <div class="card strategy-card">
-      <div class="emoji">🏷️</div>
       <h4>Нейминг и Упаковка</h4>
       <p>Избегать слов «ИТ-курс» (привлекает программистов) и просто «<a class="ref" href="https://en.wikipedia.org/wiki/Master_of_Business_Administration">MBA</a>» (слишком размыто).</p>
-      <p style="margin-top:8px;"><em>Оптимальные названия:</em> «Информационные системы: цифровая трансформация бизнеса» (RU) / «Digital Business Transformation: The Managerial Perspective» (EN).</p>
+      <p style="margin-top:6px;"><em>Оптимальные названия:</em> «Информационные системы: цифровая трансформация бизнеса» (RU) / «Digital Business Transformation: The Managerial Perspective» (EN).</p>
     </div>
     <div class="card strategy-card">
-      <div class="emoji">🎯</div>
       <h4>Управленческий ракурс</h4>
       <p>Технологии объясняются через призму денег, процессов, рисков и людей.</p>
     </div>
     <div class="card strategy-card">
-      <div class="emoji">🧩</div>
       <h4>Сквозной кейс</h4>
       <p>Все 6 кластеров (сезонов) связаны вымышленной, но реалистичной компанией (от анализа конкурентов до внедрения ИИ и взлома базы данных).</p>
     </div>
     <div class="card strategy-card">
-      <div class="emoji">🎬</div>
       <h4>Золотая середина продакшена</h4>
       <p>Качество выше, чем у университетских записей с доски, но более «живое» и экспертное, чем корпоративные анимации EdTech-платформ.</p>
     </div>
     <div class="card strategy-card">
-      <div class="emoji">🌍</div>
       <h4>Двуязычная стратегия</h4>
       <p>Съемка видео на русском (где конкуренция равна нулю) и английском (где конкуренция фрагментирована).</p>
     </div>
   </div>
 </section>
 
-<!-- ──── SECTION 6: ROADMAP ──── -->
 <section id="roadmap">
-  <div class="section-label">Раздел 6</div>
-  <h2>Дорожная карта производства и метрики</h2>
-  <p style="text-align:center; margin-bottom:32px; font-size:18px; font-weight:600;">План производства YouTube-серии (12 недель)</p>
+  <div class="section-label">06</div>
+  <h2>Дорожная карта производства</h2>
+  <p style="text-align:center; margin-bottom:32px; font-size:15px; color:var(--text2);">План производства YouTube-серии (12 недель)</p>
 
   <div class="roadmap-container">
     <div class="roadmap-line"></div>
 
     <div class="rm-item">
       <div class="rm-content">
-        <div class="rm-week" style="color:#7c6cf0;">Недели 1–2</div>
+        <div class="rm-week">W 01–02</div>
         <div class="rm-desc">Исследование рынка, сценарный каркас и разработка сквозного бизнес-кейса</div>
       </div>
       <div class="rm-spacer"></div>
-      <div class="rm-dot" style="background:#7c6cf0; color:#7c6cf0;"></div>
+      <div class="rm-dot"></div>
     </div>
 
     <div class="rm-item">
       <div class="rm-content">
-        <div class="rm-week" style="color:#0984e3;">Неделя 3</div>
+        <div class="rm-week">W 03</div>
         <div class="rm-desc">Подготовка пакета артефактов (<a class="ref" href="https://www.dama.org/cpages/body-of-knowledge">DMBOK</a>-лайт, <a class="ref" href="https://en.wikipedia.org/wiki/Service-level_agreement">SLA</a>, скоринг портфеля, матрица рисков)</div>
       </div>
       <div class="rm-spacer"></div>
-      <div class="rm-dot" style="background:#0984e3; color:#0984e3;"></div>
+      <div class="rm-dot"></div>
     </div>
 
     <div class="rm-item">
       <div class="rm-content">
-        <div class="rm-week" style="color:#00b894;">Неделя 4</div>
+        <div class="rm-week">W 04</div>
         <div class="rm-desc">Пилотный сценарий и тестовый выпуск (1 эпизод)</div>
       </div>
       <div class="rm-spacer"></div>
-      <div class="rm-dot" style="background:#00b894; color:#00b894;"></div>
+      <div class="rm-dot"></div>
     </div>
 
     <div class="rm-item">
       <div class="rm-content">
-        <div class="rm-week" style="color:#e17055;">Недели 5–6</div>
+        <div class="rm-week">W 05–06</div>
         <div class="rm-desc">Съёмка и монтаж <strong>Модуль 1: ИС и ИКТ</strong> + <strong>Модуль 2: Стратегия и Выравнивание</strong></div>
       </div>
       <div class="rm-spacer"></div>
-      <div class="rm-dot" style="background:#e17055; color:#e17055;"></div>
+      <div class="rm-dot"></div>
     </div>
 
     <div class="rm-item">
       <div class="rm-content">
-        <div class="rm-week" style="color:#fdcb6e;">Недели 7–8</div>
+        <div class="rm-week">W 07–08</div>
         <div class="rm-desc">Съёмка и монтаж <strong>Модуль 3: Проекты/Изменения</strong> + <strong>Модуль 4: Портфель</strong></div>
       </div>
       <div class="rm-spacer"></div>
-      <div class="rm-dot" style="background:#fdcb6e; color:#fdcb6e;"></div>
+      <div class="rm-dot"></div>
     </div>
 
     <div class="rm-item">
       <div class="rm-content">
-        <div class="rm-week" style="color:#e84393;">Недели 9–10</div>
+        <div class="rm-week">W 09–10</div>
         <div class="rm-desc">Съёмка и монтаж <strong>Модуль 5: ERP/BPM</strong> + <strong>Модуль 6: Data, AI &amp; Cyber Risk</strong></div>
       </div>
       <div class="rm-spacer"></div>
-      <div class="rm-dot" style="background:#e84393; color:#e84393;"></div>
+      <div class="rm-dot"></div>
     </div>
 
     <div class="rm-item">
       <div class="rm-content">
-        <div class="rm-week" style="color:#00cec9;">Недели 11–12</div>
+        <div class="rm-week">W 11–12</div>
         <div class="rm-desc">Локализация (RU/EN), упаковка (превью, SEO), запуск и ретроспектива</div>
       </div>
       <div class="rm-spacer"></div>
-      <div class="rm-dot" style="background:#00cec9; color:#00cec9;"></div>
+      <div class="rm-dot"></div>
     </div>
   </div>
 </section>
 
-<!-- ──── SECTION 7: METRICS ──── -->
 <section id="metrics">
   <div class="section-label">Метрики</div>
   <h2>Метрики успеха</h2>
   <div class="metrics-grid">
     <div class="card metric-card">
-      <div class="metric-icon" style="background:var(--gradient1);">📊</div>
+      <div class="metric-num">1</div>
       <div>
         <div class="metric-title">Показатели вовлеченности (Retention)</div>
         <div class="metric-desc">Удержание внимания в эпизодах, посвященных скучным темам (<a class="ref" href="https://www.dama.org/cpages/body-of-knowledge">DMBOK</a>, Governance), за счет разбора на живых кейсах.</div>
       </div>
     </div>
     <div class="card metric-card">
-      <div class="metric-icon" style="background:var(--gradient2);">🎯</div>
+      <div class="metric-num">2</div>
       <div>
         <div class="metric-title">Product-Market Fit</div>
         <div class="metric-desc">Запросы в комментариях от реального бизнеса, количество скачиваний приложенных к видео шаблонов (<a class="ref" href="https://www.notion.so/">Notion</a>/Excel).</div>
       </div>
     </div>
     <div class="card metric-card">
-      <div class="metric-icon" style="background:linear-gradient(135deg,#22c55e,#0ea5e9);">🔍</div>
+      <div class="metric-num">3</div>
       <div>
         <div class="metric-title">Покрытие поискового спроса</div>
         <div class="metric-desc">Доминирование в выдаче по низкоконкурентным фразам-«пробелам» (например, <em>«управление ИТ-аутсорсингом»</em>, <em>«<a class="ref" href="https://en.wikipedia.org/wiki/Virginia_Satir#Satir_change_model">Сатир</a> сопротивление изменениям»</em>, <em>«<a class="ref" href="https://en.wikipedia.org/wiki/Data_governance">data governance</a> для бизнеса»</em>).</div>
@@ -821,41 +715,35 @@ a.ref:hover { color: var(--accent); border-color: var(--accent); }
 </main>
 
 <footer class="footer">
-  Отчёт подготовлен в рамках курса «Информационные системы» &bull; 2026
+  Информационные системы &middot; 2026
 </footer>
 
-<!-- ═══════════════════ JAVASCRIPT ═══════════════════ -->
 <script>
-// ── Theme toggle ──
 const toggle = document.getElementById('themeToggle');
 const html = document.documentElement;
 toggle.addEventListener('click', () => {
   const dark = html.getAttribute('data-theme') === 'dark';
   html.setAttribute('data-theme', dark ? 'light' : 'dark');
-  toggle.textContent = dark ? '☀️' : '🌙';
-  // Re-draw chart with new colors
+  toggle.textContent = dark ? 'light' : 'dark';
   initRadar();
 });
 
-// ── Scroll progress ──
 const bar = document.getElementById('scrollProgress');
 window.addEventListener('scroll', () => {
   const h = document.documentElement.scrollHeight - window.innerHeight;
   bar.style.width = (window.scrollY / h * 100) + '%';
 });
 
-// ── Scroll reveal ──
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.08 });
 document.querySelectorAll('section, .rm-item').forEach(el => observer.observe(el));
 
-// ── Counter animation ──
 function animateCounters() {
   document.querySelectorAll('.hero-stat .num').forEach(el => {
     const target = parseInt(el.dataset.count);
     const suffix = el.dataset.suffix || '';
-    const duration = 1500;
+    const duration = 1200;
     const start = performance.now();
     function tick(now) {
       const progress = Math.min((now - start) / duration, 1);
@@ -866,17 +754,14 @@ function animateCounters() {
     requestAnimationFrame(tick);
   });
 }
-// Trigger counters when hero is visible
 const heroObs = new IntersectionObserver(([e]) => {
   if (e.isIntersecting) { animateCounters(); heroObs.disconnect(); }
 }, { threshold: 0.5 });
 heroObs.observe(document.querySelector('.hero'));
 
-// ── Cluster accordion ──
 function toggleCluster(header) {
   const body = header.nextElementSibling;
   const isOpen = header.classList.contains('open');
-  // Close all
   document.querySelectorAll('.cluster-header.open').forEach(h => {
     h.classList.remove('open');
     h.nextElementSibling.classList.remove('open');
@@ -887,14 +772,13 @@ function toggleCluster(header) {
   }
 }
 
-// ── Radar chart ──
 let radarInstance = null;
 function initRadar() {
   const ctx = document.getElementById('radarChart').getContext('2d');
   if (radarInstance) radarInstance.destroy();
   const isDark = html.getAttribute('data-theme') === 'dark';
-  const gridColor = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
-  const labelColor = isDark ? '#a0a0c0' : '#555580';
+  const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+  const labelColor = isDark ? '#777' : '#555';
 
   radarInstance = new Chart(ctx, {
     type: 'radar',
@@ -907,15 +791,17 @@ function initRadar() {
       datasets: [{
         label: 'Текущее покрытие YouTube',
         data: [5, 10, 8, 5, 30, 45, 20, 8, 35],
-        borderColor: isDark ? '#ff6b9d' : '#e84393',
-        backgroundColor: isDark ? 'rgba(255,107,157,0.12)' : 'rgba(232,67,147,0.12)',
-        borderWidth: 2, pointRadius: 4, pointHoverRadius: 7,
+        borderColor: isDark ? '#555' : '#aaa',
+        backgroundColor: isDark ? 'rgba(85,85,85,0.08)' : 'rgba(170,170,170,0.08)',
+        borderWidth: 1.5, pointRadius: 3, pointHoverRadius: 5,
+        pointBackgroundColor: isDark ? '#555' : '#aaa',
       }, {
         label: 'Идеальный курс (цель)',
         data: [90, 90, 85, 90, 90, 90, 95, 90, 85],
-        borderColor: isDark ? '#5ce1e6' : '#0984e3',
-        backgroundColor: isDark ? 'rgba(92,225,230,0.10)' : 'rgba(9,132,227,0.10)',
-        borderWidth: 2, pointRadius: 4, pointHoverRadius: 7,
+        borderColor: isDark ? '#e5e5e5' : '#222',
+        backgroundColor: isDark ? 'rgba(229,229,229,0.06)' : 'rgba(34,34,34,0.06)',
+        borderWidth: 1.5, pointRadius: 3, pointHoverRadius: 5,
+        pointBackgroundColor: isDark ? '#e5e5e5' : '#222',
       }]
     },
     options: {
@@ -926,22 +812,20 @@ function initRadar() {
           grid: { color: gridColor },
           angleLines: { color: gridColor },
           ticks: { display: false },
-          pointLabels: { color: labelColor, font: { size: 11, weight: '500' } }
+          pointLabels: { color: labelColor, font: { size: 10, family: 'Inter', weight: '500' } }
         }
       },
       plugins: {
         legend: {
-          labels: { color: labelColor, font: { size: 12 }, usePointStyle: true, pointStyle: 'circle', padding: 16 }
+          labels: { color: labelColor, font: { size: 11, family: 'Inter' }, usePointStyle: true, pointStyle: 'circle', padding: 16 }
         }
       },
-      animation: { duration: 1200, easing: 'easeOutQuart' }
+      animation: { duration: 1000, easing: 'easeOutQuart' }
     }
   });
 }
-// Init chart on load
 window.addEventListener('DOMContentLoaded', initRadar);
 
-// ── Smooth active nav link highlighting ──
 const navLinks = document.querySelectorAll('.topnav-links a[href^="#"]');
 const sections = document.querySelectorAll('section[id]');
 window.addEventListener('scroll', () => {
@@ -950,8 +834,8 @@ window.addEventListener('scroll', () => {
     if (window.scrollY >= s.offsetTop - 120) current = s.id;
   });
   navLinks.forEach(a => {
-    a.style.color = a.getAttribute('href') === '#' + current ? 'var(--accent)' : '';
-    a.style.background = a.getAttribute('href') === '#' + current ? 'var(--surface)' : '';
+    const active = a.getAttribute('href') === '#' + current;
+    a.classList.toggle('active', active);
   });
 });
 </script>
